@@ -2084,6 +2084,17 @@
   function closeContactModal(){
     if(!contactOverlay || contactOverlay.hidden) return;
     contactOverlay.hidden = true;
+    // Bug real (detectado tras publicar en GitHub Pages): al enviar con éxito
+    // el formulario se vacía (contactForm.reset()) pero el aviso "¡Gracias!"
+    // se quedaba escrito en la página para siempre — si se cerraba el modal y
+    // se volvía a abrir para escribir un segundo mensaje, el aviso de la vez
+    // anterior seguía ahí debajo del formulario vacío, dando la falsa
+    // impresión de que se había enviado sin pulsar nada. Se limpia aquí, al
+    // cerrar, para que el modal siempre se reabra en blanco.
+    if(contactResult){
+      contactResult.textContent = '';
+      contactResult.className = 'contact-form-result';
+    }
     if(contactLastFocused && contactLastFocused.focus) contactLastFocused.focus();
   }
   // Envío por fetch/AJAX (sin recargar ni navegar la página, igual que se
